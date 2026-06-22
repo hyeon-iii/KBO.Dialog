@@ -4,276 +4,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚾ Baseball Diary</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body{
-  background:#f3f4f6;
-}
-.preview-img{
-  width:100%;
-  height:120px;
-  object-fit:cover;
-  border-radius:12px;
-}
-</style>
-
+<title>KBO 직관 기록장</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-<div class="max-w-5xl mx-auto p-5">
+<div class="container">
 
-  <h1 class="text-4xl font-bold text-center text-blue-900 mb-8">
-    ⚾ Baseball Diary
-  </h1>
+<h1>⚾ KBO 직관 기록장</h1>
 
-  <div class="bg-white rounded-xl shadow p-5 mb-8">
+<div class="stats">
+    <h2>직관 승률</h2>
+    <p id="winRate">0%</p>
+</div>
 
-```
-<h2 class="text-2xl font-bold mb-4">
-  직관 기록 작성
-</h2>
+<label>응원팀</label> <select id="team">
 
-<input
-  type="date"
-  id="gameDate"
-  class="w-full border p-3 rounded mb-3"
->
-
-<select
-  id="favoriteTeam"
-  class="w-full border p-3 rounded mb-3"
->
-  <option value="">응원팀 선택</option>
-
-  <option>LG 트윈스</option>
-  <option>두산 베어스</option>
-  <option>SSG 랜더스</option>
-  <option>KT 위즈</option>
-  <option>KIA 타이거즈</option>
-  <option>삼성 라이온즈</option>
-  <option>롯데 자이언츠</option>
-  <option>NC 다이노스</option>
-  <option>한화 이글스</option>
-  <option>키움 히어로즈</option>
+<option value="">선택</option>
+<option>LG 트윈스</option>
+<option>두산 베어스</option>
+<option>SSG 랜더스</option>
+<option>키움 히어로즈</option>
+<option>KT 위즈</option>
+<option>한화 이글스</option>
+<option>삼성 라이온즈</option>
+<option>KIA 타이거즈</option>
+<option>롯데 자이언츠</option>
+<option>NC 다이노스</option>
 </select>
 
-<input
-  type="text"
-  id="stadium"
-  placeholder="구장"
-  class="w-full border p-3 rounded mb-3"
->
+<div class="logo-box">
+<img id="teamLogo">
+</div>
 
-<textarea
-  id="description"
-  placeholder="오늘 직관 후기를 작성해주세요"
-  rows="5"
-  class="w-full border p-3 rounded mb-3"
-></textarea>
+<label>홈구장</label> <input id="stadium" readonly>
 
-<input
-  type="file"
-  id="photos"
-  multiple
-  accept="image/*"
-  class="mb-4"
->
+<label>직관 날짜</label> <input type="date" id="date">
 
-<div
-  id="preview"
-  class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-4"
-></div>
+<label>상대팀</label> <input id="opponent">
 
-<button
-  onclick="saveDiary()"
-  class="bg-blue-900 text-white px-5 py-3 rounded-lg w-full"
->
-  저장하기
-</button>
-```
+<label>경기 결과</label> <select id="result">
 
-  </div>
+<option>승</option>
+<option>패</option>
+<option>무</option>
+</select>
 
-  <h2 class="text-2xl font-bold mb-4">
-    📒 나의 직관 기록
-  </h2>
+<label>점수</label> <input id="score" placeholder="예: 7 : 3">
 
-  <div id="diaryList"></div>
+<label>메모</label>
+
+<textarea id="memo"></textarea>
+
+<label>직관 사진 (최대 5장)</label> <input type="file" id="photos" accept="image/*" multiple>
+
+<div id="preview"></div>
+
+<button onclick="saveRecord()">기록 저장</button>
+
+<h2>저장된 기록</h2>
+<div id="records"></div>
 
 </div>
 
-<script>
-
-let photoData = [];
-
-document
-.getElementById("photos")
-.addEventListener("change", function(e){
-
-  const files =
-    Array.from(e.target.files).slice(0,5);
-
-  photoData = [];
-
-  const preview =
-    document.getElementById("preview");
-
-  preview.innerHTML = "";
-
-  files.forEach(file => {
-
-    const reader =
-      new FileReader();
-
-    reader.onload = function(event){
-
-      photoData.push(event.target.result);
-
-      preview.innerHTML += `
-        <img
-          src="${event.target.result}"
-          class="preview-img"
-        >
-      `;
-    };
-
-    reader.readAsDataURL(file);
-
-  });
-
-});
-
-function saveDiary(){
-
-  const diary = {
-
-    id: Date.now(),
-
-    gameDate:
-      document.getElementById("gameDate").value,
-
-    favoriteTeam:
-      document.getElementById("favoriteTeam").value,
-
-    stadium:
-      document.getElementById("stadium").value,
-
-    description:
-      document.getElementById("description").value,
-
-    photos: photoData
-
-  };
-
-  let diaries =
-    JSON.parse(
-      localStorage.getItem("baseballDiary")
-    ) || [];
-
-  diaries.unshift(diary);
-
-  localStorage.setItem(
-    "baseballDiary",
-    JSON.stringify(diaries)
-  );
-
-  location.reload();
-}
-
-function deleteDiary(id){
-
-  let diaries =
-    JSON.parse(
-      localStorage.getItem("baseballDiary")
-    ) || [];
-
-  diaries =
-    diaries.filter(
-      diary => diary.id !== id
-    );
-
-  localStorage.setItem(
-    "baseballDiary",
-    JSON.stringify(diaries)
-  );
-
-  renderDiaries();
-}
-
-function renderDiaries(){
-
-  const diaries =
-    JSON.parse(
-      localStorage.getItem("baseballDiary")
-    ) || [];
-
-  const diaryList =
-    document.getElementById("diaryList");
-
-  diaryList.innerHTML = "";
-
-  diaries.forEach(diary => {
-
-    let photosHtml = "";
-
-    diary.photos.forEach(photo => {
-
-      photosHtml += `
-        <img
-          src="${photo}"
-          class="preview-img"
-        >
-      `;
-    });
-
-    diaryList.innerHTML += `
-      <div
-        class="bg-white shadow rounded-xl p-5 mb-5"
-      >
-
-        <h3
-          class="text-xl font-bold text-blue-900"
-        >
-          ${diary.favoriteTeam}
-        </h3>
-
-        <p class="mt-2">
-          📅 ${diary.gameDate}
-        </p>
-
-        <p>
-          🏟 ${diary.stadium}
-        </p>
-
-        <p class="mt-3">
-          ${diary.description}
-        </p>
-
-        <div
-          class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-4"
-        >
-          ${photosHtml}
-        </div>
-
-        <button
-          onclick="deleteDiary(${diary.id})"
-          class="bg-red-500 text-white px-4 py-2 rounded mt-4"
-        >
-          삭제
-        </button>
-
-      </div>
-    `;
-  });
-}
-
-renderDiaries();
-
-</script>
+<script src="js/app.js"></script>
 
 </body>
 </html>
