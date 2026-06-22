@@ -1,3 +1,7 @@
+// =========================
+// KBO Baseball Diary v1.0
+// =========================
+
 const stadiums = {
 "LG 트윈스":"잠실야구장",
 "두산 베어스":"잠실야구장",
@@ -27,29 +31,54 @@ const logos = {
 let uploadedPhotos = [];
 let editIndex = -1;
 
-const team = document.getElementById("team");
-const stadium = document.getElementById("stadium");
-const teamLogo = document.getElementById("teamLogo");
-const preview = document.getElementById("preview");
+// =========================
+// DOM
+// =========================
 
-team.addEventListener("change", () => {
+const team =
+document.getElementById("team");
+
+const stadium =
+document.getElementById("stadium");
+
+const teamLogo =
+document.getElementById("teamLogo");
+
+const preview =
+document.getElementById("preview");
+
+// =========================
+// TEAM CHANGE
+// =========================
+
+team.addEventListener(
+"change",
+() => {
 
 ```
 stadium.value =
-    stadiums[team.value] || "";
+stadiums[team.value] || "";
 
 teamLogo.src =
-    logos[team.value] || "";
+logos[team.value] || "";
 ```
 
-});
+}
+);
+
+// =========================
+// PHOTO UPLOAD
+// =========================
 
 document
 .getElementById("photos")
-.addEventListener("change", function(){
+.addEventListener(
+"change",
+function(){
 
 ```
-const files = [...this.files];
+const files =
+[...this.files];
 
 if(files.length > 5){
 
@@ -68,7 +97,8 @@ preview.innerHTML = "";
 
 files.forEach(file => {
 
-    const reader = new FileReader();
+    const reader =
+    new FileReader();
 
     reader.onload = e => {
 
@@ -77,10 +107,10 @@ files.forEach(file => {
         );
 
         const img =
-            document.createElement("img");
+        document.createElement("img");
 
         img.src =
-            e.target.result;
+        e.target.result;
 
         preview.appendChild(img);
     };
@@ -89,7 +119,12 @@ files.forEach(file => {
 });
 ```
 
-});
+}
+);
+
+// =========================
+// SAVE
+// =========================
 
 function saveRecord(){
 
@@ -112,24 +147,19 @@ const record = {
     stadium.value,
 
     date:
-    document.getElementById("date")
-    .value,
+    document.getElementById("date").value,
 
     opponent:
-    document.getElementById("opponent")
-    .value,
+    document.getElementById("opponent").value,
 
     result:
-    document.getElementById("result")
-    .value,
+    document.getElementById("result").value,
 
     score:
-    document.getElementById("score")
-    .value,
+    document.getElementById("score").value,
 
     memo:
-    document.getElementById("memo")
-    .value,
+    document.getElementById("memo").value,
 
     photos:
     uploadedPhotos
@@ -144,7 +174,9 @@ JSON.parse(
 
 if(editIndex === -1){
 
-    records.unshift(record);
+    records.unshift(
+        record
+    );
 
 }else{
 
@@ -156,7 +188,7 @@ if(editIndex === -1){
     document.querySelector(
     ".save-btn"
     ).textContent =
-    "기록 저장";
+    "📖 다이어리에 저장하기";
 }
 
 localStorage.setItem(
@@ -168,10 +200,16 @@ clearForm();
 
 loadRecords();
 
-alert("저장되었습니다.");
+alert(
+"다이어리에 저장되었습니다 ⚾"
+);
 ```
 
 }
+
+// =========================
+// CLEAR FORM
+// =========================
 
 function clearForm(){
 
@@ -182,19 +220,24 @@ stadium.value = "";
 
 teamLogo.src = "";
 
-document.getElementById("date")
+document
+.getElementById("date")
 .value = "";
 
-document.getElementById("opponent")
+document
+.getElementById("opponent")
 .value = "";
 
-document.getElementById("score")
+document
+.getElementById("score")
 .value = "";
 
-document.getElementById("memo")
+document
+.getElementById("memo")
 .value = "";
 
-document.getElementById("photos")
+document
+.getElementById("photos")
 .value = "";
 
 preview.innerHTML = "";
@@ -203,6 +246,10 @@ uploadedPhotos = [];
 ```
 
 }
+
+// =========================
+// EDIT
+// =========================
 
 function editRecord(index){
 
@@ -228,23 +275,28 @@ record.stadium;
 teamLogo.src =
 logos[record.team] || "";
 
-document.getElementById("date")
+document
+.getElementById("date")
 .value =
 record.date || "";
 
-document.getElementById("opponent")
+document
+.getElementById("opponent")
 .value =
 record.opponent || "";
 
-document.getElementById("result")
+document
+.getElementById("result")
 .value =
 record.result || "승";
 
-document.getElementById("score")
+document
+.getElementById("score")
 .value =
 record.score || "";
 
-document.getElementById("memo")
+document
+.getElementById("memo")
 .value =
 record.memo || "";
 
@@ -254,7 +306,7 @@ record.photos || [];
 preview.innerHTML = "";
 
 uploadedPhotos.forEach(
-    photo => {
+photo => {
 
     const img =
     document.createElement("img");
@@ -262,13 +314,12 @@ uploadedPhotos.forEach(
     img.src = photo;
 
     preview.appendChild(img);
-
 });
 
 document.querySelector(
 ".save-btn"
 ).textContent =
-"수정 완료";
+"✏️ 수정 완료";
 
 window.scrollTo({
     top:0,
@@ -278,12 +329,16 @@ window.scrollTo({
 
 }
 
+// =========================
+// DELETE
+// =========================
+
 function deleteRecord(index){
 
 ```
 const confirmDelete =
 confirm(
-    "이 기록을 삭제하시겠습니까?"
+"이 기록을 삭제하시겠습니까?"
 );
 
 if(!confirmDelete){
@@ -309,6 +364,10 @@ loadRecords();
 
 }
 
+// =========================
+// LOAD
+// =========================
+
 function loadRecords(){
 
 ```
@@ -326,10 +385,9 @@ document.getElementById(
 
 if(records.length === 0){
 
-    recordsDiv.innerHTML =
-    `
+    recordsDiv.innerHTML = `
     <div class="empty">
-        저장된 직관 기록이 없습니다.
+    첫 직관의 추억을 기록해보세요 ⚾
     </div>
     `;
 
@@ -355,7 +413,6 @@ records.forEach(
             src="${photo}"
             alt="직관 사진">
             `;
-
         });
     }
 
@@ -381,7 +438,7 @@ records.forEach(
     <div class="record-header">
 
         <div class="record-team">
-            ${record.team}
+            ⚾ ${record.team}
         </div>
 
         <div class="
@@ -393,33 +450,23 @@ records.forEach(
     </div>
 
     <p>
-    <strong>날짜</strong>
-    :
-    ${record.date || "-"}
+    📅 ${record.date || "-"}
     </p>
 
     <p>
-    <strong>구장</strong>
-    :
-    ${record.stadium}
+    🏟️ ${record.stadium}
     </p>
 
     <p>
-    <strong>상대팀</strong>
-    :
-    ${record.opponent || "-"}
+    🆚 ${record.opponent || "-"}
     </p>
 
     <p>
-    <strong>점수</strong>
-    :
-    ${record.score || "-"}
+    📊 ${record.score || "-"}
     </p>
 
     <p>
-    <strong>후기</strong>
-    :
-    ${record.memo || "-"}
+    📝 ${record.memo || "-"}
     </p>
 
     <div class="record-gallery">
@@ -448,9 +495,8 @@ records.forEach(
     `;
 
     recordsDiv.appendChild(
-        card
+    card
     );
-
 });
 
 updateStats(records);
@@ -458,13 +504,17 @@ updateStats(records);
 
 }
 
+// =========================
+// STATS
+// =========================
+
 function updateStats(records){
 
 ```
 let wins = 0;
 let losses = 0;
 
-records.forEach(record => {
+records.forEach(record=>{
 
     if(record.result==="승"){
         wins++;
@@ -475,41 +525,45 @@ records.forEach(record => {
     }
 });
 
-const totalGames =
+const total =
 wins + losses;
 
 let rate = 0;
 
-if(totalGames > 0){
+if(total > 0){
 
     rate =
     (
-    (wins / totalGames)
+    wins / total
     * 100
     ).toFixed(1);
 }
 
-document.getElementById(
-"totalGames"
-).textContent =
+document
+.getElementById("totalGames")
+.textContent =
 records.length;
 
-document.getElementById(
-"wins"
-).textContent =
+document
+.getElementById("wins")
+.textContent =
 wins;
 
-document.getElementById(
-"losses"
-).textContent =
+document
+.getElementById("losses")
+.textContent =
 losses;
 
-document.getElementById(
-"winRate"
-).textContent =
+document
+.getElementById("winRate")
+.textContent =
 rate + "%";
 ```
 
 }
+
+// =========================
+// INIT
+// =========================
 
 loadRecords();
