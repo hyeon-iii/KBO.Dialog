@@ -2,70 +2,209 @@
 
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KBO 직관 기록장</title>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+```
+<title>KBO Tracker v1.0</title>
+
 <link rel="stylesheet" href="css/style.css">
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+```
+
 </head>
+
 <body>
 
-<div class="container">
+<header class="hero">
 
-<h1>⚾ KBO 직관 기록장</h1>
+```
+<div class="hero-content">
 
-<div class="stats">
-    <h2>직관 승률</h2>
-    <p id="winRate">0%</p>
-</div>
+    <h1>⚾ KBO Tracker</h1>
 
-<label>응원팀</label> <select id="team">
-
-<option value="">선택</option>
-<option>LG 트윈스</option>
-<option>두산 베어스</option>
-<option>SSG 랜더스</option>
-<option>키움 히어로즈</option>
-<option>KT 위즈</option>
-<option>한화 이글스</option>
-<option>삼성 라이온즈</option>
-<option>KIA 타이거즈</option>
-<option>롯데 자이언츠</option>
-<option>NC 다이노스</option>
-</select>
-
-<div class="logo-box">
-<img id="teamLogo">
-</div>
-
-<label>홈구장</label> <input id="stadium" readonly>
-
-<label>직관 날짜</label> <input type="date" id="date">
-
-<label>상대팀</label> <input id="opponent">
-
-<label>경기 결과</label> <select id="result">
-
-<option>승</option>
-<option>패</option>
-<option>무</option>
-</select>
-
-<label>점수</label> <input id="score" placeholder="예: 7 : 3">
-
-<label>메모</label>
-
-<textarea id="memo"></textarea>
-
-<label>직관 사진 (최대 5장)</label> <input type="file" id="photos" accept="image/*" multiple>
-
-<div id="preview"></div>
-
-<button onclick="saveRecord()">기록 저장</button>
-
-<h2>저장된 기록</h2>
-<div id="records"></div>
+    <p>
+        나만의 KBO 직관 기록장
+    </p>
 
 </div>
+```
+
+</header>
+
+<main class="container">
+
+```
+<section class="dashboard">
+
+    <div class="card stat-card">
+        <h3>총 직관</h3>
+        <span id="totalGames">0</span>
+    </div>
+
+    <div class="card stat-card">
+        <h3>승</h3>
+        <span id="wins">0</span>
+    </div>
+
+    <div class="card stat-card">
+        <h3>패</h3>
+        <span id="losses">0</span>
+    </div>
+
+    <div class="card stat-card">
+        <h3>승률</h3>
+        <span id="winRate">0%</span>
+    </div>
+
+</section>
+
+<section class="card form-card">
+
+    <h2>직관 기록 등록</h2>
+
+    <div class="grid">
+
+        <div>
+
+            <label>응원팀</label>
+
+            <select id="team">
+
+                <option value="">
+                    선택
+                </option>
+
+                <option>
+                    LG 트윈스
+                </option>
+
+                <option>
+                    두산 베어스
+                </option>
+
+                <option>
+                    SSG 랜더스
+                </option>
+
+                <option>
+                    키움 히어로즈
+                </option>
+
+                <option>
+                    KT 위즈
+                </option>
+
+                <option>
+                    한화 이글스
+                </option>
+
+                <option>
+                    삼성 라이온즈
+                </option>
+
+                <option>
+                    KIA 타이거즈
+                </option>
+
+                <option>
+                    롯데 자이언츠
+                </option>
+
+                <option>
+                    NC 다이노스
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="logo-wrapper">
+
+            <img
+                id="teamLogo"
+                src=""
+                alt="팀 로고">
+
+        </div>
+
+    </div>
+
+    <label>홈구장</label>
+    <input
+        type="text"
+        id="stadium"
+        readonly>
+
+    <label>직관 날짜</label>
+    <input
+        type="date"
+        id="date">
+
+    <label>상대팀</label>
+    <input
+        type="text"
+        id="opponent"
+        placeholder="예: 삼성 라이온즈">
+
+    <label>경기 결과</label>
+
+    <select id="result">
+        <option>승</option>
+        <option>패</option>
+        <option>무</option>
+    </select>
+
+    <label>점수</label>
+
+    <input
+        type="text"
+        id="score"
+        placeholder="예: 7 : 3">
+
+    <label>직관 후기</label>
+
+    <textarea
+        id="memo"
+        placeholder="오늘 경기 기록을 남겨보세요">
+    </textarea>
+
+    <label>직관 사진 (최대 5장)</label>
+
+    <input
+        type="file"
+        id="photos"
+        accept="image/*"
+        multiple>
+
+    <div id="preview"></div>
+
+    <button
+        class="save-btn"
+        onclick="saveRecord()">
+
+        기록 저장
+
+    </button>
+
+</section>
+
+<section class="card">
+
+    <h2>직관 기록</h2>
+
+    <div id="records">
+    </div>
+
+</section>
+```
+
+</main>
 
 <script src="js/app.js"></script>
 
