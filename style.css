@@ -37,16 +37,50 @@ body{
 ```
 font-family:'Gaegu',cursive;
 
-background:var(--bg);
-
-color:var(--text);
-
 min-height:100vh;
+
+color:#2d2d2d;
+
+background-color:#fdfaf3;
+
+background-image:
+
+repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 38px,
+    rgba(59,130,246,.05) 39px,
+    rgba(59,130,246,.05) 40px
+),
+
+radial-gradient(
+    circle at 15% 20%,
+    rgba(0,0,0,.03) 0,
+    rgba(0,0,0,.03) 60px,
+    transparent 61px
+),
+
+radial-gradient(
+    circle at 85% 70%,
+    rgba(0,0,0,.03) 0,
+    rgba(0,0,0,.03) 60px,
+    transparent 61px
+),
+
+radial-gradient(
+    circle at 60% 30%,
+    rgba(0,0,0,.02) 0,
+    rgba(0,0,0,.02) 80px,
+    transparent 81px
+);
+
+background-attachment:fixed;
 
 line-height:1.6;
 ```
 
 }
+
 
 /* =====================
 HERO
@@ -57,25 +91,64 @@ HERO
 ```
 background:
 linear-gradient(
-135deg,
-#f87171,
-#fbbf24
+    135deg,
+    #dc2626,
+    #f59e0b
 );
 
-padding:70px 20px;
+color:white;
 
-text-align:center;
+padding:80px 20px;
 
 border-radius:
 0 0 40px 40px;
 
-box-shadow:
-0 10px 30px rgba(0,0,0,.08);
+position:relative;
 
-color:white;
+overflow:hidden;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.15);
 ```
 
 }
+
+.hero::before{
+
+```
+content:"⚾";
+
+position:absolute;
+
+right:50px;
+
+top:20px;
+
+font-size:120px;
+
+opacity:.15;
+```
+
+}
+
+.hero::after{
+
+```
+content:"⚾";
+
+position:absolute;
+
+left:50px;
+
+bottom:10px;
+
+font-size:80px;
+
+opacity:.12;
+```
+
+}
+
 
 .hero h1{
 
@@ -106,12 +179,44 @@ CONTAINER
 ```
 max-width:1200px;
 
-margin:auto;
+margin:30px auto;
 
 padding:25px;
+
+background:#fffef8;
+
+border-radius:30px;
+
+box-shadow:
+0 15px 40px rgba(0,0,0,.08);
+
+position:relative;
 ```
 
 }
+
+.container::before{
+
+```
+content:"";
+
+position:absolute;
+
+top:0;
+bottom:0;
+
+left:55px;
+
+width:3px;
+
+background:
+rgba(239,68,68,.25);
+
+border-radius:999px;
+```
+
+}
+
 
 /* =====================
 DASHBOARD
@@ -341,44 +446,39 @@ SAVE BUTTON
 
 .save-btn{
 
-```
-width:100%;
+    width:100%;
 
-margin-top:20px;
+    margin-top:20px;
 
-border:none;
+    border:none;
 
-padding:15px;
+    padding:15px;
 
-border-radius:999px;
+    border-radius:999px;
 
-background:var(--primary);
+    background:#f97316;
 
-color:white;
+    color:white;
 
-font-size:1.2rem;
+    font-size:1.2rem;
 
-font-weight:700;
+    font-weight:700;
 
-cursor:pointer;
+    cursor:pointer;
 
-transition:.2s;
-```
+    box-shadow:
+    0 6px 15px rgba(249,115,22,.35);
 
+    transition:.2s;
 }
 
 .save-btn:hover{
 
-```
-background:
-var(--primary-dark);
+    transform:
+    translateY(-2px);
 
-transform:
-translateY(-2px);
-```
-
+    background:#ea580c;
 }
-
 /* =====================
 PREVIEW
 ===================== */
@@ -424,23 +524,46 @@ RECORD
 
 .record{
 
-```
-background:#fffef8;
+    background:#fffef8;
 
-border-radius:20px;
+    border-radius:20px;
 
-padding:25px;
+    padding:25px;
 
-margin-top:20px;
+    margin-top:20px;
 
-position:relative;
+    position:relative;
 
-box-shadow:
-0 5px 20px rgba(0,0,0,.08);
+    box-shadow:
+    0 8px 20px rgba(0,0,0,.08);
 
-transition:.2s;
-```
+    transition:.2s;
+}
 
+.record::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:80px;
+
+    height:20px;
+
+    background:
+    rgba(250,204,21,.5);
+
+    top:-8px;
+
+    left:30px;
+
+    transform:rotate(-5deg);
+}
+
+.record:hover{
+
+    transform:
+    translateY(-3px);
 }
 
 .record:hover{
@@ -492,24 +615,36 @@ font-size:1.1rem;
 }
 
 .win{
-color:var(--success);
+
+    color:#16a34a;
+
+    font-size:1.4rem;
+
+    font-weight:700;
+
+    transform:rotate(-8deg);
 }
 
 .lose{
-color:var(--danger);
+
+    color:#dc2626;
+
+    font-size:1.4rem;
+
+    font-weight:700;
+
+    transform:rotate(8deg);
 }
 
 .draw{
-color:var(--warning);
+
+    color:#ca8a04;
+
+    font-size:1.4rem;
+
+    font-weight:700;
 }
 
-.record p{
-
-```
-margin:8px 0;
-```
-
-}
 
 /* =====================
 PHOTO GALLERY
@@ -555,16 +690,32 @@ transition:.2s;
 
 }
 
-.record-gallery img:hover{
+.record-gallery img{
 
-```
-transform:
-rotate(0deg)
-scale(1.05);
-```
+    width:120px;
 
+    height:120px;
+
+    object-fit:cover;
+
+    background:white;
+
+    padding:8px 8px 28px 8px;
+
+    box-shadow:
+    0 8px 15px rgba(0,0,0,.15);
+
+    transform:rotate(-2deg);
+
+    transition:.2s;
 }
 
+.record-gallery img:hover{
+
+    transform:
+    rotate(0deg)
+    scale(1.05);
+}
 /* =====================
 ACTION BUTTONS
 ===================== */
