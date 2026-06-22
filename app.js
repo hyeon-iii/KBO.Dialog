@@ -2,11 +2,11 @@ const stadiums = {
 "LG 트윈스":"잠실야구장",
 "두산 베어스":"잠실야구장",
 "SSG 랜더스":"인천 SSG 랜더스필드",
-"키움 히어로즈":"고척스카이돔",
+"키움 히어로즈":"고척 스카이돔",
 "KT 위즈":"수원 KT 위즈파크",
 "한화 이글스":"대전 한화생명 볼파크",
 "삼성 라이온즈":"대구 삼성 라이온즈 파크",
-"KIA 타이거즈":"광주 기아 챔피언스필드",
+"KIA 타이거즈":"광주 기아 챔피언스 필드",
 "롯데 자이언츠":"사직야구장",
 "NC 다이노스":"창원 NC 파크"
 };
@@ -26,141 +26,258 @@ const logos = {
 
 let uploadedPhotos = [];
 
-team.addEventListener("change",function(){
+const team = document.getElementById("team");
+const stadium = document.getElementById("stadium");
+const teamLogo = document.getElementById("teamLogo");
+const preview = document.getElementById("preview");
 
-stadium.value = stadiums[this.value] || "";
+team.addEventListener("change", () => {
 
-teamLogo.src = logos[this.value] || "";
+```
+stadium.value =
+    stadiums[team.value] || "";
+
+teamLogo.src =
+    logos[team.value] || "";
+```
 
 });
 
-photos.addEventListener("change",function(){
+document
+.getElementById("photos")
+.addEventListener("change", function(){
 
+```
 const files = [...this.files];
 
 if(files.length > 5){
-alert("사진은 최대 5장입니다.");
-this.value="";
-return;
+    alert("사진은 최대 5장까지 업로드 가능합니다.");
+    this.value = "";
+    return;
 }
 
-uploadedPhotos=[];
+uploadedPhotos = [];
+preview.innerHTML = "";
 
-preview.innerHTML="";
+files.forEach(file => {
 
-files.forEach(file=>{
+    const reader = new FileReader();
 
-const reader = new FileReader();
+    reader.onload = e => {
 
-reader.onload = e=>{
+        uploadedPhotos.push(
+            e.target.result
+        );
 
-uploadedPhotos.push(e.target.result);
+        const img =
+            document.createElement("img");
 
-const img=document.createElement("img");
-img.src=e.target.result;
+        img.src =
+            e.target.result;
 
-preview.appendChild(img);
+        preview.appendChild(img);
+    };
 
-};
-
-reader.readAsDataURL(file);
-
+    reader.readAsDataURL(file);
 });
+```
 
 });
 
 function saveRecord(){
 
+```
+if(!team.value){
+    alert("응원팀을 선택해주세요.");
+    return;
+}
+
 const record = {
-team:team.value,
-stadium:stadium.value,
-date:date.value,
-opponent:opponent.value,
-result:result.value,
-score:score.value,
-memo:memo.value,
-photos:uploadedPhotos
+
+    team: team.value,
+
+    stadium: stadium.value,
+
+    date:
+    document.getElementById("date").value,
+
+    opponent:
+    document.getElementById("opponent").value,
+
+    result:
+    document.getElementById("result").value,
+
+    score:
+    document.getElementById("score").value,
+
+    memo:
+    document.getElementById("memo").value,
+
+    photos: uploadedPhotos
 };
 
 const records =
-JSON.parse(localStorage.getItem("kboRecords")) || [];
+    JSON.parse(
+        localStorage.getItem("kboRecords")
+    ) || [];
 
-records.push(record);
+records.unshift(record);
 
 localStorage.setItem(
-"kboRecords",
-JSON.stringify(records)
+    "kboRecords",
+    JSON.stringify(records)
 );
+
+document.getElementById("date").value="";
+document.getElementById("opponent").value="";
+document.getElementById("score").value="";
+document.getElementById("memo").value="";
+document.getElementById("photos").value="";
+preview.innerHTML="";
+uploadedPhotos=[];
 
 loadRecords();
 
-alert("저장 완료");
+alert("저장되었습니다.");
+```
 
 }
 
 function loadRecords(){
 
+```
 const records =
-JSON.parse(localStorage.getItem("kboRecords")) || [];
+    JSON.parse(
+        localStorage.getItem("kboRecords")
+    ) || [];
 
-let html="";
+const recordsDiv =
+    document.getElementById("records");
 
-let win=0;
-let lose=0;
+if(records.length === 0){
 
-records.forEach(r=>{
+    recordsDiv.innerHTML =
+    '<div class="empty">저장된 직관 기록이 없습니다.</div>';
 
-if(r.result==="승") win++;
-if(r.result==="패") lose++;
+    updateStats([]);
+    return;
+}
 
-let photosHTML="";
+recordsDiv.innerHTML = "";
 
-if(r.photos){
+records.forEach((record,index)=>{
 
-r.photos.forEach(photo=>{
+    let photosHTML = "";
 
-photosHTML +=
-`<img src="${photo}">`;
+    if(record.photos){
 
+        record.photos.forEach(photo=>{
+
+            photosHTML += `
+            <img src="${photo}">
+            `;
+        });
+    }
+
+    let resultClass = "draw";
+
+    if(record.result==="승"){
+        resultClass="win";
+    }
+
+    if(record.result==="패"){
+        resultClass="lose";
+    }
+
+    const card =
+    document.createElement("div");
+
+    card.className="record";
+
+    card.innerHTML=`
+
+    <div class="record-header">
+
+        <div class="record-team">
+            ${record.team}
+        </div>
+
+        <div class="record-result ${resultClass}">
+            ${record.result}
+        </div>
+
+    </div>
+
+    <p><strong>날짜</strong> :
+    ${record.date || "-"}</p>
+
+    <p><strong>구장</strong> :
+    ${record.stadium}</p>
+
+    <p><strong>상대팀</strong> :
+    ${record.opponent || "-"}</p>
+
+    <p><strong>점수</strong> :
+    ${record.score || "-"}</p>
+
+    <p><strong>후기</strong> :
+    ${record.memo || "-"}</p>
+
+    <div class="record-gallery">
+        ${photosHTML}
+    </div>
+
+    `;
+
+    recordsDiv.appendChild(card);
 });
+
+updateStats(records);
+```
 
 }
 
-html += `
+function updateStats(records){
 
-<div class="record">
-<h3>${r.date}</h3>
-<p><b>응원팀:</b> ${r.team}</p>
-<p><b>구장:</b> ${r.stadium}</p>
-<p><b>상대팀:</b> ${r.opponent}</p>
-<p><b>결과:</b> ${r.result}</p>
-<p><b>점수:</b> ${r.score}</p>
-<p><b>메모:</b> ${r.memo}</p>
-<div>${photosHTML}</div>
-</div>
-`;
+```
+let wins = 0;
+let losses = 0;
 
+records.forEach(record=>{
+
+    if(record.result==="승"){
+        wins++;
+    }
+
+    if(record.result==="패"){
+        losses++;
+    }
 });
 
-recordsDiv = document.getElementById("records");
-recordsDiv.innerHTML = html;
-
-const total = win + lose;
+const totalGames =
+    wins + losses;
 
 let rate = 0;
 
-if(total > 0){
+if(totalGames > 0){
 
-rate =
-((win / total) * 100)
-.toFixed(1);
-
+    rate =
+    ((wins / totalGames) * 100)
+    .toFixed(1);
 }
 
-document.getElementById(
-"winRate"
-).innerText =
-`${rate}% (${win}승 ${lose}패)`;
+document.getElementById("totalGames")
+.textContent = records.length;
+
+document.getElementById("wins")
+.textContent = wins;
+
+document.getElementById("losses")
+.textContent = losses;
+
+document.getElementById("winRate")
+.textContent = rate + "%";
+```
 
 }
 
